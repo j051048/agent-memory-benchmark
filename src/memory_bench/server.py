@@ -27,13 +27,14 @@ _BLOB_BASE = os.environ.get(
 
 
 def _load_blob_manifest() -> dict:
-    """Load .blob_manifest.json (maps relative paths to {sha, url})."""
-    path = _root / ".blob_manifest.json"
-    if path.exists():
-        try:
-            return _json.loads(path.read_text(encoding="utf-8"))
-        except Exception:
-            pass
+    """Load blob manifest (maps relative paths to {sha, url})."""
+    for name in ("blob-manifest.json", ".blob_manifest.json"):
+        path = _root / name
+        if path.exists():
+            try:
+                return _json.loads(path.read_text(encoding="utf-8"))
+            except Exception:
+                pass
     return {}
 
 

@@ -204,8 +204,9 @@ def publish_results(
         raise typer.Exit(1)
 
     console.rule("Uploading result to Vercel Blob")
-    blob_manifest_path = root / ".blob_manifest.json"
-    blob_manifest: dict[str, str] = json.loads(blob_manifest_path.read_text()) if blob_manifest_path.exists() else {}
+    blob_manifest_paths = [root / ".blob_manifest.json", root / "blob-manifest.json"]
+    existing_blob_manifest = next((p for p in blob_manifest_paths if p.exists()), None)
+    blob_manifest: dict[str, str] = json.loads(existing_blob_manifest.read_text()) if existing_blob_manifest else {}
 
     rel = str(abs_result.relative_to(root))
     sha = hashlib.sha256(abs_result.read_bytes()).hexdigest()
@@ -220,10 +221,13 @@ def publish_results(
             "Content-Type": "application/octet-stream",
         })
         try:
-            with urllib.request.urlopen(req):
-                pass
-            blob_manifest[rel] = sha
-            blob_manifest_path.write_text(json.dumps(blob_manifest, indent=2))
+            with urllib.request.urlopen(req) as resp:
+                resp_data = json.loads(resp.read())
+            actual_url = resp_data.get("url", "")
+            blob_manifest[rel] = {"sha": sha, "url": actual_url}
+            blob_manifest_json = json.dumps(blob_manifest, indent=2)
+            for blob_manifest_path in blob_manifest_paths:
+                blob_manifest_path.write_text(blob_manifest_json)
             console.print(f"  [green]✓[/green] uploaded {rel}")
         except Exception as e:
             console.print(f"  [red]✗[/red] upload failed: {e}")
@@ -306,11 +310,14 @@ def unpublish_results(
         raise typer.Exit(1)
 
     # Remove from local blob manifest
-    blob_manifest_path = root / ".blob_manifest.json"
-    if blob_manifest_path.exists():
-        blob_manifest = json.loads(blob_manifest_path.read_text())
+    blob_manifest_paths = [root / ".blob_manifest.json", root / "blob-manifest.json"]
+    existing_blob_manifest = next((p for p in blob_manifest_paths if p.exists()), None)
+    if existing_blob_manifest:
+        blob_manifest = json.loads(existing_blob_manifest.read_text())
         blob_manifest.pop(rel, None)
-        blob_manifest_path.write_text(json.dumps(blob_manifest, indent=2))
+        blob_manifest_json = json.dumps(blob_manifest, indent=2)
+        for blob_manifest_path in blob_manifest_paths:
+            blob_manifest_path.write_text(blob_manifest_json)
 
 
 @app.command("publish-dataset")
