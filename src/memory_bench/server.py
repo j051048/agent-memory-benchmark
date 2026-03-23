@@ -385,6 +385,24 @@ def split_category_breakdown(dataset: str, split: str):
     return JSONResponse(out)
 
 
+@app.get("/api/run-url")
+def run_url(path: str):
+    """Return the direct Blob CDN URL for an output file, if available.
+
+    The client can use this to fetch and decompress the file directly from the
+    CDN instead of routing through this server, avoiding large proxied downloads.
+    Returns {"url": null} when the file is served locally (dev mode).
+    """
+    # path is like "outputs/longmemeval/hindsight/rag/s.json"
+    gz_path = path if path.endswith(".gz") else path + ".gz"
+    # Check if it exists locally — if so, client should use the normal endpoint
+    if (_root / path).exists() or (_root / gz_path).exists():
+        return JSONResponse({"url": None})
+    # Return the blob URL from the manifest (or clean fallback)
+    url = _blob_url(gz_path)
+    return JSONResponse({"url": url})
+
+
 @app.get("/api/external-results")
 def external_results():
     path = _root / "external_results.json"
@@ -490,7 +508,7 @@ def serve_file(file_path: str):
                 media_type="application/json",
                 headers={"Content-Encoding": "gzip", "Cache-Control": "no-cache"},
             )
-        # Fall back to Vercel Blob
+        # Fall back to Vercel Blob — proxy the file
         blob_path = gz_path  # always fetch .gz from blob
         try:
             data = _fetch_blob(blob_path)
