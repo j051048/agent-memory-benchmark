@@ -98,11 +98,11 @@ class _HindsightBase(MemoryProvider):
 
     # ── Bank creation (sync) ──────────────────────────────────────────────────
 
-    def _bank_kwargs(self) -> dict:
+    def _bank_kwargs(self, bank_id: str | None = None) -> dict:
         return dict(enable_observations=False)
 
     def _create_bank(self, bank_id: str) -> None:
-        kwargs = self._bank_kwargs()
+        kwargs = self._bank_kwargs(bank_id=bank_id)
         try:
             self._client.banks.delete(bank_id=bank_id)
         except Exception:
@@ -138,7 +138,7 @@ class _HindsightBase(MemoryProvider):
     # ── Bank creation (async) ─────────────────────────────────────────────────
 
     async def _acreate_bank(self, client, bank_id: str) -> None:
-        kwargs = self._bank_kwargs()
+        kwargs = self._bank_kwargs(bank_id=bank_id)
         try:
             await client.adelete_bank(bank_id=bank_id)
         except Exception:
@@ -166,6 +166,8 @@ class _HindsightBase(MemoryProvider):
     def ingest(self, documents: list[Document]) -> None:
         from hindsight_client.hindsight_client import _run_async
         from hindsight_client_api.api.operations_api import OperationsApi
+        import logging as _logging
+        _log = _logging.getLogger(__name__)
 
         if not self._per_unit:
             self._create_bank(self._bank_id)
@@ -199,32 +201,82 @@ class _HindsightBase(MemoryProvider):
 
             for i in range(0, len(all_items), _BATCH_SIZE):
                 batch = all_items[i:i + _BATCH_SIZE]
-                for attempt in range(3):
+                for attempt in range(5):
                     try:
-                        self._client.retain_batch(
+                        resp = self._client.retain_batch(
                             bank_id=bank_id,
                             items=batch,
                             retain_async=True,
                         )
+                        # Track async operation IDs so we can wait for completion below.
+                        if resp is not None and getattr(resp, "var_async", False):
+                            op_id = getattr(resp, "operation_id", None)
+                            if op_id:
+                                operation_ids.append((bank_id, op_id))
                         break
                     except Exception as e:
                         err = str(e)
                         etype = type(e).__name__
                         if ("duplicate key" in err or "duplicate document_ids" in err
                                 or "violates foreign key constraint" in err
-                                or "empty response" in err or "Cannot connect" in err
-                                or "Timeout" in etype or "Timeout" in err):
-                            # Skip: already ingested / duplicate / FK race / LLM/timeout failure / daemon down.
+                                or "empty response" in err):
+                            # Skip: already ingested / duplicate / FK race.
                             break
-                        if attempt < 2:
+                        if "Cannot connect" in err:
+                            # Daemon down — wait longer before retrying.
+                            if attempt < 4:
+                                time.sleep(30)
+                            else:
+                                _log.warning(f"retain_batch: daemon down after 5 attempts, skipping: {err[:200]}")
+                                break
+                        elif "Timeout" in etype or "Timeout" in err or "CancelledError" in err:
+                            # Transient LLM/server timeout — retry once with backoff.
+                            if attempt < 1:
+                                _log.warning(f"retain_batch timeout (attempt {attempt+1}/2), retrying in 15s: {err[:100]}")
+                                time.sleep(15)
+                            else:
+                                _log.warning(f"retain_batch: timeout after 2 attempts, skipping batch: {err[:200]}")
+                                break
+                        elif attempt < 4:
                             time.sleep(10)
                         else:
                             # Last resort: skip any unrecognised transient error rather than killing the run.
-                            import logging
-                            logging.getLogger(__name__).warning(
-                                f"retain_batch unhandled error (skipping batch): {etype}: {err[:200]}"
-                            )
+                            _log.warning(f"retain_batch unhandled error (skipping batch): {etype}: {err[:200]}")
                             break
+
+        # Wait for async extraction to finish before returning.
+        # Critical for large documents: retain_async=True returns immediately but
+        # the daemon extracts facts in the background. Without waiting, retrieval
+        # right after ingest finds an empty bank.
+        if operation_ids or items_by_bank:
+            # Determine which banks to check and poll until they have facts.
+            banks_to_check = list(items_by_bank.keys())
+            max_wait_s = 300  # 5 minutes max
+            poll_interval = 3
+            start = time.monotonic()
+            _log.info(f"Waiting for extraction to complete on {len(banks_to_check)} bank(s)…")
+            for bank_id in banks_to_check:
+                deadline = start + max_wait_s
+                while time.monotonic() < deadline:
+                    try:
+                        resp = self._client.recall(
+                            bank_id=bank_id,
+                            query="summary",
+                            budget="low",
+                            max_tokens=64,
+                        )
+                        n_results = len(resp.results) if resp is not None and resp.results else 0
+                        n_chunks = len(resp.chunks) if resp is not None and hasattr(resp, "chunks") and resp.chunks else 0
+                        if n_results or n_chunks:
+                            _log.info(f"Bank {bank_id}: extraction ready ({n_results} facts, {n_chunks} chunks)")
+                            break
+                    except Exception:
+                        pass
+                    elapsed = time.monotonic() - start
+                    _log.info(f"Bank {bank_id}: still extracting… ({elapsed:.0f}s elapsed)")
+                    time.sleep(poll_interval)
+                else:
+                    _log.warning(f"Bank {bank_id}: timed out waiting for extraction; proceeding anyway.")
 
     # ── Recall kwargs ─────────────────────────────────────────────────────────
 
@@ -346,6 +398,7 @@ class HindsightMemoryProvider(_HindsightBase):
             llm_provider="gemini",
             llm_model="gemini-2.5-flash-lite",
             llm_api_key=self._api_key,
+            idle_timeout=0,  # Disable idle timeout to prevent daemon from shutting down during long runs
         )
         try:
             self._client.banks.list()

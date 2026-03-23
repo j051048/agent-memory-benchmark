@@ -137,7 +137,7 @@ class EvalRunner:
         if dataset.isolation_unit is not None:
             unit_ids = {uid for doc in documents if (uid := dataset.get_isolation_id(doc)) is not None}
 
-        memory.prepare(store_dir, unit_ids=unit_ids)
+        memory.prepare(store_dir, unit_ids=unit_ids, reset=not skip_ingestion)
 
         stored_contexts: dict[str, str] = {}
         stored_answers: dict[str, str] = {}
@@ -198,7 +198,7 @@ class EvalRunner:
                 correct=correct,
                 judge_reason=judge_reason,
                 meta=q.meta,
-                raw_response=answer_result.raw_response,
+                raw_response=None,  # skip storing to conserve disk space
                 category_axes=dataset.get_result_categories(q.meta),
             )
 
@@ -226,7 +226,10 @@ class EvalRunner:
             if skip_ingested:
                 prev = self._load_previous(dataset.name, split, effective_name, mode.name)
                 for r in prev.get("results", []):
-                    uid = r.get("meta", {}).get("sample_id") or r.get("meta", {}).get("user_id")
+                    uid = (r.get("meta", {}).get("sample_id")
+                           or r.get("meta", {}).get("user_id")
+                           or r.get("meta", {}).get("conversation_id")
+                           or r.get("query_id"))
                     if uid:
                         already_done_units.add(uid)
                 if already_done_units:
@@ -247,7 +250,10 @@ class EvalRunner:
                 import dataclasses
                 _qr_fields = {f.name for f in dataclasses.fields(QueryResult)}
                 for r in prev_data.get("results", []):
-                    uid = r.get("meta", {}).get("sample_id") or r.get("meta", {}).get("user_id")
+                    uid = (r.get("meta", {}).get("sample_id")
+                           or r.get("meta", {}).get("user_id")
+                           or r.get("meta", {}).get("conversation_id")
+                           or r.get("query_id"))
                     if uid in already_done_units:
                         _prev_by_unit.setdefault(uid, []).append(
                             QueryResult(**{k: v for k, v in r.items() if k in _qr_fields})
