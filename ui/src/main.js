@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import { createRouter, createWebHistory, RouterView } from 'vue-router'
+import { createUnhead } from '@unhead/vue'
 import './style.css'
 import DatasetList   from './pages/DatasetList.vue'
 import DatasetDetail from './pages/DatasetDetail.vue'
@@ -20,6 +21,9 @@ const router = createRouter({
   ],
 })
 
+const head = createUnhead()
+
 const app = createApp(RouterView)
 app.use(router)
+app.use(head)
 app.mount('#app')

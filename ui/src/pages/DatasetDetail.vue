@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useHead } from '@unhead/vue'
 import { fetchManifest, fetchSplitStats, fetchExternalResults, fetchDatasetInfo, fetchSplitCategoryBreakdown } from '../api.js'
 import { fmtTokens, accuracyColor } from '../utils.js'
 import Card from '@/components/ui/card.vue'
@@ -17,6 +18,17 @@ import TableCell from '@/components/ui/table-cell.vue'
 const route   = useRoute()
 const router  = useRouter()
 const dataset = computed(() => decodeURIComponent(route.params.name))
+
+useHead(computed(() => ({
+  title: `${dataset.value} — Agent Memory Benchmark`,
+  meta: [
+    { name: 'description', content: `Benchmark results for the ${dataset.value} dataset — accuracy, recall speed, and context token comparisons across memory providers.` },
+    { property: 'og:title', content: `${dataset.value} — Agent Memory Benchmark` },
+    { property: 'og:description', content: `Benchmark results for the ${dataset.value} dataset — accuracy, recall speed, and context token comparisons across memory providers.` },
+    { property: 'og:url', content: `https://agentmemorybenchmark.ai/dataset/${encodeURIComponent(dataset.value)}` },
+  ],
+  link: [{ rel: 'canonical', href: `https://agentmemorybenchmark.ai/dataset/${encodeURIComponent(dataset.value)}` }],
+})))
 
 const manifest        = ref([])
 const splitStats      = ref({})

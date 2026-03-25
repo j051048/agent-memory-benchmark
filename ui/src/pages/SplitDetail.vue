@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useHead } from '@unhead/vue'
 import { fetchSplitStats } from '../api.js'
 import { fmtTokens } from '../utils.js'
 import Card from '@/components/ui/card.vue'
@@ -16,6 +17,12 @@ const route   = useRoute()
 const router  = useRouter()
 const dataset = computed(() => decodeURIComponent(route.params.name))
 const split   = computed(() => decodeURIComponent(route.params.split))
+
+useHead(computed(() => ({
+  title: `${dataset.value} · ${split.value} — Agent Memory Benchmark`,
+  meta: [{ property: 'og:title', content: `${dataset.value} · ${split.value} — Agent Memory Benchmark` }],
+  link: [{ rel: 'canonical', href: `https://agentmemorybenchmark.ai/dataset/${encodeURIComponent(dataset.value)}/${encodeURIComponent(split.value)}` }],
+})))
 
 const stats   = ref(null)
 const loading = ref(true)

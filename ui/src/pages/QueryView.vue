@@ -1,6 +1,7 @@
 <script setup>
 import { ref, watch, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useHead } from '@unhead/vue'
 import { fetchQueries, fetchDocument } from '../api.js'
 import Input from '@/components/ui/input.vue'
 import Badge from '@/components/ui/badge.vue'
@@ -12,6 +13,12 @@ const route   = useRoute()
 const router  = useRouter()
 const dataset = computed(() => decodeURIComponent(route.params.name))
 const split   = computed(() => decodeURIComponent(route.params.split))
+
+useHead(computed(() => ({
+  title: `${dataset.value} · ${split.value} Queries — Agent Memory Benchmark`,
+  meta: [{ property: 'og:title', content: `${dataset.value} · ${split.value} Queries — Agent Memory Benchmark` }],
+  link: [{ rel: 'canonical', href: `https://agentmemorybenchmark.ai/dataset/${encodeURIComponent(dataset.value)}/${encodeURIComponent(split.value)}/queries` }],
+})))
 
 const allItems  = ref([])
 const catFilter = ref({})
