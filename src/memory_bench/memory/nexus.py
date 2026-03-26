@@ -41,6 +41,14 @@ _RE_DAY_BEFORE = re.compile(r'\bthe day before yesterday\b', re.I)
 _RE_TWO_DAYS_AGO = re.compile(r'\btwo days ago\b', re.I)
 _RE_FEW_DAYS_AGO = re.compile(r'\ba few days ago\b', re.I)
 _RE_COUPLE_DAYS = re.compile(r'\ba couple (?:of )?days ago\b', re.I)
+_RE_THIS_PAST_WEEKDAY = re.compile(r'\bthis past (monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b', re.I)
+_RE_NEXT_WEEKDAY = re.compile(r'\bnext (monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b', re.I)
+_RE_AGO_N_DAYS = re.compile(r'\b(\d+) days? ago\b', re.I)
+_RE_AGO_N_WEEKS = re.compile(r'\b(\d+) weeks? ago\b', re.I)
+_RE_RECENTLY = re.compile(r'\brecently\b', re.I)
+_RE_EARLIER_TODAY = re.compile(r'\bearlier today\b', re.I)
+_RE_TONIGHT = re.compile(r'\btonight\b', re.I)
+_RE_THIS_MORNING = re.compile(r'\bthis morning\b', re.I)
 
 # ── List-query detection for dynamic k ─────────────────────────────
 _RE_LIST_QUERY = re.compile(
@@ -57,6 +65,15 @@ def _last_weekday(ref_date: datetime, day_name: str) -> datetime:
     if days_back == 0:
         days_back = 7  # "last Monday" means the Monday BEFORE today
     return ref_date - timedelta(days=days_back)
+
+
+def _next_weekday(ref_date: datetime, day_name: str) -> datetime:
+    """Return the next occurrence of `day_name` strictly after `ref_date`."""
+    target_wd = _WEEKDAY_MAP.get(day_name.lower(), 0)
+    days_fwd = (target_wd - ref_date.weekday()) % 7
+    if days_fwd == 0:
+        days_fwd = 7
+    return ref_date + timedelta(days=days_fwd)
 
 
 def _fmt(dt: datetime) -> str:
@@ -130,6 +147,30 @@ class NexusMemoryProvider(MemoryProvider):
         )
         text = _RE_COUPLE_DAYS.sub(
             lambda m: f"{m.group(0)} [around {_fmt(dt - timedelta(days=2))}]", text
+        )
+        text = _RE_THIS_PAST_WEEKDAY.sub(
+            lambda m: f"{m.group(0)} [{_fmt(_last_weekday(dt, m.group(1)))}]", text
+        )
+        text = _RE_NEXT_WEEKDAY.sub(
+            lambda m: f"{m.group(0)} [{_fmt(_next_weekday(dt, m.group(1)))}]", text
+        )
+        text = _RE_AGO_N_DAYS.sub(
+            lambda m: f"{m.group(0)} [{_fmt(dt - timedelta(days=int(m.group(1))))}]", text
+        )
+        text = _RE_AGO_N_WEEKS.sub(
+            lambda m: f"{m.group(0)} [{_fmt(dt - timedelta(weeks=int(m.group(1))))}]", text
+        )
+        text = _RE_RECENTLY.sub(
+            lambda m: f"{m.group(0)} [around {_fmt(dt)}]", text
+        )
+        text = _RE_EARLIER_TODAY.sub(
+            lambda m: f"{m.group(0)} [{_fmt(dt)}]", text
+        )
+        text = _RE_TONIGHT.sub(
+            lambda m: f"{m.group(0)} [{_fmt(dt)}]", text
+        )
+        text = _RE_THIS_MORNING.sub(
+            lambda m: f"{m.group(0)} [{_fmt(dt)}]", text
         )
         return text
 
@@ -214,7 +255,7 @@ class NexusMemoryProvider(MemoryProvider):
                     content = self._resolve_relative_dates(content, doc.timestamp)
 
                 # Phase 2: Split session into turn-level chunks
-                chunks = self._split_into_chunks(content, doc.id, doc.timestamp, chunk_size=5)
+                chunks = self._split_into_chunks(content, doc.id, doc.timestamp, chunk_size=3)
 
                 for i, chunk_content in enumerate(chunks):
                     key = f"doc_{doc.id}_chunk_{i}"
@@ -249,7 +290,7 @@ class NexusMemoryProvider(MemoryProvider):
     async def async_retrieve(
         self, query: str, k: int = 20, user_id: str | None = None, query_timestamp: str | None = None
     ) -> tuple[list[Document], dict | None]:
-        """Retrieve with dynamic k based on query type."""
+        """Retrieve with dynamic k, recency reranking, and temporal context."""
         uid = self._to_uuid(user_id)
         print(f"      [RAG-STEP] Starting Nexus Retrieval for user {uid}...", end="", flush=True)
         t_start = time.perf_counter()
@@ -266,24 +307,73 @@ class NexusMemoryProvider(MemoryProvider):
         t_elapsed = time.perf_counter() - t_start
         print(f" Done ({t_elapsed:.1f}s, found {len(results)})")
 
+        # ── Recency-aware reranking ──────────────────────────────
+        # For temporal queries, boost memories closer to query_timestamp.
+        # For all queries, sort by session date (newest first) to help LLM
+        # prioritize the most recent information when facts conflict.
+        if query_timestamp:
+            try:
+                q_dt = datetime.fromisoformat(query_timestamp.replace("Z", "+00:00"))
+            except (ValueError, TypeError):
+                q_dt = None
+        else:
+            q_dt = None
+
+        def _recency_key(mem: dict) -> float:
+            """Higher = more recent = should appear first."""
+            vf = mem.get("valid_from") or mem.get("updated_at") or mem.get("created_at") or ""
+            if not vf:
+                return 0.0
+            try:
+                mem_dt = datetime.fromisoformat(vf.replace("Z", "+00:00"))
+                if q_dt:
+                    # Days between memory and query time (smaller = more relevant)
+                    delta = abs((q_dt - mem_dt).total_seconds())
+                    return -delta  # negative so that closer = higher
+                return mem_dt.timestamp()
+            except (ValueError, TypeError):
+                return 0.0
+
+        # Blend: keep RRF score as primary, add recency as tiebreaker
+        # Assign a normalized recency bonus (0 to 0.3) on top of similarity
+        if len(results) > 1:
+            recency_vals = [_recency_key(r) for r in results]
+            r_min, r_max = min(recency_vals), max(recency_vals)
+            r_range = r_max - r_min if r_max != r_min else 1.0
+            for i, r in enumerate(results):
+                sim = r.get("similarity", 0) or r.get("_weighted_score", 0) or 0.5
+                recency_bonus = 0.3 * ((recency_vals[i] - r_min) / r_range)
+                r["_final_score"] = sim + recency_bonus
+            results.sort(key=lambda r: r.get("_final_score", 0), reverse=True)
+
         docs = []
         truncated_raw = []
         for r in results:
             r_copy = dict(r)
             r_copy.pop('embedding', None)
             r_copy.pop('raw_session', None)
+            r_copy.pop('_final_score', None)
 
             val = str(r_copy.get('value', ''))
-            # Safety cap (chunks are small, so this rarely triggers)
             if len(val) > 5000:
                 val = val[:5000] + "... (truncated)"
+
+            # Add temporal marker to content for LLM awareness
+            vf = r.get("valid_from") or r.get("updated_at") or ""
+            date_tag = ""
+            if vf:
+                try:
+                    dt = datetime.fromisoformat(vf.replace("Z", "+00:00"))
+                    date_tag = f"[Memory date: {dt.strftime('%d %B %Y')}] "
+                except (ValueError, TypeError):
+                    pass
 
             r_copy['value'] = val
             truncated_raw.append(r_copy)
 
             docs.append(Document(
                 id=r.get("id", str(uuid.uuid4())),
-                content=f"{val}\ncategory: {r.get('category','')}\nsimilarity: {r.get('similarity',0):.3f}"
+                content=f"{date_tag}{val}\ncategory: {r.get('category','')}\nsimilarity: {r.get('similarity',0):.3f}"
             ))
 
         return docs, {"raw_results": truncated_raw}

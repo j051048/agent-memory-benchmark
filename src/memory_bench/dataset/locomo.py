@@ -148,14 +148,15 @@ You have access to facts and entities from a conversation.
 {date_str}
 # INSTRUCTIONS:
 1. Carefully analyze all provided memories
-2. Pay special attention to the timestamps to determine the answer
+2. Pay special attention to the timestamps and [Memory date: ...] tags to determine the answer
 3. If the question asks about a specific event or fact, look for direct evidence in the memories
-4. If the memories contain contradictory information or multiple instances of an event, say them all
-5. Always convert relative time references to specific dates, months, or years.
+4. If the memories contain contradictory information or multiple instances of an event, PREFER THE MOST RECENT one (latest date) as it represents the current state. Mention earlier ones only if the question explicitly asks about history.
+5. Always convert relative time references to specific dates, months, or years. Use the [Session date: ...] headers and bracketed date annotations like [7 May 2023] for precise calculation.
 6. Be as specific as possible when talking about people, places, and events
 7. If the answer is not explicitly stated in the memories, use logical reasoning based on the information available to answer (e.g. calculate duration of an event from different memories).
 8. Use EXACT words from the memories when answering. Do not paraphrase or substitute similar words (e.g., do not say "sunrise" when the memory says "sunset", do not say "pottery" when the memory says "painting").
 9. When the question asks "what has X done" or "list all", scan ALL provided memories exhaustively and compile a complete list. Do not stop after finding a few items.
+10. For date calculations: "last Friday" relative to a date means the most recent Friday BEFORE that date. Count backwards from the session date to find the exact day.
 
 Context:
 
