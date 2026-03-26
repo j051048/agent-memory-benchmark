@@ -1,0 +1,244 @@
+{
+  "summary": {
+    "dataset": "locomo",
+    "total": 100,
+    "correct": 75,
+    "accuracy": 0.75,
+    "ingest_time_s": 0.0,
+    "total_time_s": 978.6644586999901
+  },
+  "total_failures": 25,
+  "by_category": {
+    "temporal": [
+      {
+        "id": "conv-26_q0",
+        "query": "When did Caroline go to the LGBTQ support group?",
+        "answer": "Caroline attended the LGBTQ support group on July 16, 2023.",
+        "gold": [
+          "7 May 2023"
+        ],
+        "reason": "The generated answer specifies a different date than the one provided in the gold answer."
+      },
+      {
+        "id": "conv-26_q9",
+        "query": "When did Caroline meet up with her friends, family, and mentors?",
+        "answer": "Caroline mentioned meeting up with her friends, family, and mentors during her volunteering experiences and decision-making processes.",
+        "gold": [
+          "The week before 9 June 2023"
+        ],
+        "reason": "The generated answer does not provide the relevant time period as specified in the gold answer, failing to meet the criteria of alignment with the provided details."
+      },
+      {
+        "id": "conv-26_q16",
+        "query": "When did Melanie sign up for a pottery class?",
+        "answer": "Melanie signed up for a pottery class on a Tuesday, as stated in the context.",
+        "gold": [
+          "2 July 2023"
+        ],
+        "reason": "The generated answer does not specifically reference the date stated in the gold answer, resulting in a mismatch."
+      },
+      {
+        "id": "conv-26_q25",
+        "query": "When did Caroline go to the LGBTQ conference?",
+        "answer": "Caroline attended the LGBTQ support group on July 16, 2023.",
+        "gold": [
+          "10 July 2023"
+        ],
+        "reason": "The generated answer conflicts with the specific date provided in the gold answer."
+      },
+      {
+        "id": "conv-26_q28",
+        "query": "When did Caroline go to the adoption meeting?",
+        "answer": "Caroline attended the adoption assistance group during the week of her initial application to adoption agencies.",
+        "gold": [
+          "The friday before 15 July 2023"
+        ],
+        "reason": "The generated answer does not reference the specific timeframe ('The Friday before 15 July 2023') provided in the gold answer."
+      },
+      {
+        "id": "conv-26_q44",
+        "query": "When is Melanie's daughter's birthday?",
+        "answer": "Based on the context, Melanie's daughter's birthday occurred on a Sunday before July 17, 2023.",
+        "gold": [
+          "13 August"
+        ],
+        "reason": "The generated answer does not align with the specific date provided in the gold answer."
+      },
+      {
+        "id": "conv-26_q45",
+        "query": "When did Caroline attend a pride parade in August?",
+        "answer": "Caroline attended an LGBTQ pride parade in August on a Tuesday.",
+        "gold": [
+          "The Friday before 14 August 2023"
+        ],
+        "reason": "The generated answer states the parade occurred on a Tuesday, differing from the 'gold' answer's Friday-based timing."
+      },
+      {
+        "id": "conv-26_q53",
+        "query": "When did Caroline apply to adoption agencies?",
+        "answer": "Caroline applied to adoption agencies during the week of July 10th, 2023.",
+        "gold": [
+          "The week of 23 August 2023"
+        ],
+        "reason": "The generated answer provides a differing time frame ('the week of July 10th, 2023') than specified in the gold answer ('23 August 2023')."
+      },
+      {
+        "id": "conv-26_q58",
+        "query": "When did Melanie make a plate in pottery class?",
+        "answer": "Melanie made a plate in pottery class on 2023-07-13.",
+        "gold": [
+          "24 August 2023"
+        ],
+        "reason": "The generated answer specifies a date inconsistent with the gold answer."
+      },
+      {
+        "id": "conv-26_q62",
+        "query": "When did Melanie go to the park?",
+        "answer": "Melanie went to the park with her kids on July 16, 2023.",
+        "gold": [
+          "27 August 2023"
+        ],
+        "reason": "The generated answer specifies a different date than the gold answer, so it is marked as incorrect."
+      },
+      {
+        "id": "conv-26_q80",
+        "query": "When did Melanie buy the figurines?",
+        "answer": "Melanie bought the figurines on 2023-08-28.",
+        "gold": [
+          "21 October 2023"
+        ],
+        "reason": "The generated answer specifies a date that does not match the gold answer provided."
+      }
+    ],
+    "single-hop": [
+      {
+        "id": "conv-26_q3",
+        "query": "What did Caroline research?",
+        "answer": "Caroline researched counseling as a potential path for her personal and professional development.",
+        "gold": [
+          "Adoption agencies"
+        ],
+        "reason": "The generated answer does not align with the topic provided in the gold answer, which is specific to adoption agencies."
+      },
+      {
+        "id": "conv-26_q23",
+        "query": "What books has Melanie read?",
+        "answer": "Melanie has read a book recommended by Caroline.",
+        "gold": [
+          "\"Nothing is Impossible\", \"Charlotte's Web\""
+        ],
+        "reason": "The generated answer does not specify any titles or content of Melanie's reading, so it does not align with the ground truth."
+      },
+      {
+        "id": "conv-26_q34",
+        "query": "What events has Caroline participated in to help children?",
+        "answer": "Caroline has volunteered at an LGBTQ+ youth center where she supported and guided young individuals, sharing her personal story to create a positive impact.",
+        "gold": [
+          "Mentoring program, school speech"
+        ],
+        "reason": "The generated answer does not specifically mention the same events as detailed in the gold answer, such as mentoring programs or school speeches."
+      },
+      {
+        "id": "conv-26_q37",
+        "query": "What did Melanie paint recently?",
+        "answer": "Melanie recently painted a vibrant lake sunrise.",
+        "gold": [
+          "sunset"
+        ],
+        "reason": "The generated answer differs in the depicted scene between a sunset and a sunrise."
+      },
+      {
+        "id": "conv-26_q38",
+        "query": "What activities has Melanie done with her family?",
+        "answer": "Melanie has engaged in several activities with her family, including attending a concert, going on camping trips and hikes, and visiting parks where her kids could enjoy and explore outdoors.",
+        "gold": [
+          "Pottery, painting, camping, museum, swimming, hiking"
+        ],
+        "reason": "The generated answer omits multiple activities specifically mentioned in the gold answer, such as pottery, painting, swimming, and visiting museums."
+      },
+      {
+        "id": "conv-26_q40",
+        "query": "How many times has Melanie gone to the beach in 2023?",
+        "answer": "According to the provided context, Melanie has gone to the beach once in 2023.",
+        "gold": [
+          2
+        ],
+        "reason": "The generated answer mentions a conflicting frequency compared to the gold answer, which does not touch on the same topic reliably."
+      },
+      {
+        "id": "conv-26_q48",
+        "query": "What types of pottery have Melanie and her kids made?",
+        "answer": "Melanie and her children have created various pottery pieces, including bowls and plates.",
+        "gold": [
+          "bowls, cup"
+        ],
+        "reason": "The generated answer includes 'plates,' which does not correspond to the gold answer's content."
+      },
+      {
+        "id": "conv-26_q65",
+        "query": "What are some changes Caroline has faced during her transition journey?",
+        "answer": "Caroline has expressed finding acceptance and courage during her transition journey, attending powerful support group sessions, and embracing educational and career aspirations.",
+        "gold": [
+          "Changes to her body, losing unsupportive friends"
+        ],
+        "reason": "The generated answer does not address the specific changes such as physical and social challenges mentioned in the gold answer."
+      },
+      {
+        "id": "conv-26_q70",
+        "query": "What transgender-specific events has Caroline attended?",
+        "answer": "Caroline attended an LGBTQ+ support group where transgender individuals shared inspiring stories, as she expressed how deeply moved and thankful she felt for the support provided during this event.",
+        "gold": [
+          "Poetry reading, conference"
+        ],
+        "reason": "The generated answer does not explicitly mention 'poetry reading' or 'conference,' making it an insufficient match to the gold answer."
+      },
+      {
+        "id": "conv-26_q78",
+        "query": "What items has Melanie bought?",
+        "answer": "Melanie has enrolled in a pottery class as a means of creative expression and relaxation.",
+        "gold": [
+          "Figurines, shoes"
+        ],
+        "reason": "The generated answer does not address the topic specified in the question or align with the gold answer."
+      }
+    ],
+    "open-domain": [
+      {
+        "id": "conv-26_q84",
+        "query": "How does Melanie prioritize self-care?",
+        "answer": "Melanie prioritizes self-care by engaging in creative outlets such as her pottery class, which she finds therapeutic and expressive.",
+        "gold": [
+          "by carving out some me-time each day for activities like running, reading, or playing the violin"
+        ],
+        "reason": "The generated answer differs notably from the gold answer in describing Melanie's self-care activities."
+      },
+      {
+        "id": "conv-26_q85",
+        "query": "What are Caroline's plans for the summer?",
+        "answer": "Caroline plans to continue volunteering at the LGBTQ+ youth center during the summer.",
+        "gold": [
+          "researching adoption agencies"
+        ],
+        "reason": "The generated answer refers to a distinct activity not aligning with the referenced topic in the gold answer."
+      },
+      {
+        "id": "conv-26_q87",
+        "query": "Why did Caroline choose the adoption agency?",
+        "answer": "Caroline chose the adoption agency because she is passionate about providing a safe and loving home for children in need.",
+        "gold": [
+          "because of their inclusivity and support for LGBTQ+ individuals"
+        ],
+        "reason": "The generated answer does not align with the specific reasoning provided in the gold answer."
+      },
+      {
+        "id": "conv-26_q97",
+        "query": "What workshop did Caroline attend recently?",
+        "answer": "Caroline recently attended an adoption guidance and assistance workshop.",
+        "gold": [
+          "LGBTQ+ counseling workshop"
+        ],
+        "reason": "The generated answer mentions a different workshop than the gold answer, so it does not align with the ground truth."
+      }
+    ]
+  }
+}

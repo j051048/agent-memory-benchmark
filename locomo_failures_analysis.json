@@ -1,0 +1,309 @@
+[
+  {
+    "idx": 1,
+    "id": "conv-26_q0",
+    "category": "temporal",
+    "query": "When did Caroline go to the LGBTQ support group?",
+    "gold": "7 May 2023",
+    "answer": "Caroline attended the LGBTQ support group on July 16, 2023.",
+    "judge_reason": "The generated answer provides a date (July 16, 2023) that does not match the gold's referenced date (7 May 2023).",
+    "gold_ids": [
+      "conv-26_session_1"
+    ]
+  },
+  {
+    "idx": 17,
+    "id": "conv-26_q16",
+    "category": "temporal",
+    "query": "When did Melanie sign up for a pottery class?",
+    "gold": "2 July 2023",
+    "answer": "Melanie signed up for a pottery class one day before Caroline mentioned her LGBTQ+ pride parade experience.",
+    "judge_reason": "The generated answer does not directly reference the specific date of '2 July 2023' or provide an equivalent time reference.",
+    "gold_ids": [
+      "conv-26_session_5"
+    ]
+  },
+  {
+    "idx": 19,
+    "id": "conv-26_q18",
+    "category": "single-hop",
+    "query": "Where has Melanie camped?",
+    "gold": "beach, mountains, forest",
+    "answer": "Melanie camped in the forest.",
+    "judge_reason": "The generated answer only includes 'forest' and not the additional locations 'beach' or 'mountains' listed in the gold answer.",
+    "gold_ids": [
+      "conv-26_session_4",
+      "conv-26_session_6",
+      "conv-26_session_8"
+    ]
+  },
+  {
+    "idx": 21,
+    "id": "conv-26_q20",
+    "category": "temporal",
+    "query": "When did Melanie go to the museum?",
+    "gold": "5 July 2023",
+    "answer": "Melanie went to the museum on July 16, 2023.",
+    "judge_reason": "The generated answer provides a different date (July 16, 2023) than the one specified in the gold answer (July 5, 2023).",
+    "gold_ids": [
+      "conv-26_session_6"
+    ]
+  },
+  {
+    "idx": 26,
+    "id": "conv-26_q25",
+    "category": "temporal",
+    "query": "When did Caroline go to the LGBTQ conference?",
+    "gold": "10 July 2023",
+    "answer": "Caroline went to the LGBTQ conference on March 24, 2026.",
+    "judge_reason": "The generated answer does not reference the same date as the gold answer, indicating inconsistency with the provided information.",
+    "gold_ids": [
+      "conv-26_session_7"
+    ]
+  },
+  {
+    "idx": 28,
+    "id": "conv-26_q27",
+    "category": "multi-hop",
+    "query": "Would Caroline pursue writing as a career option?",
+    "gold": "LIkely no; though she likes reading, she wants to be a counselor",
+    "answer": "Yes, Caroline might consider writing as a viable and meaningful career option.",
+    "judge_reason": "The generated answer contradicts the information provided in the gold answer.",
+    "gold_ids": [
+      "conv-26_session_7"
+    ]
+  },
+  {
+    "idx": 29,
+    "id": "conv-26_q28",
+    "category": "temporal",
+    "query": "When did Caroline go to the adoption meeting?",
+    "gold": "The friday before 15 July 2023",
+    "answer": "Caroline attended an adoption advice/assistance meeting during the week she applied to adoption agencies.",
+    "judge_reason": "The generated answer does not adequately identify the specific time frame provided in the gold answer, appearing too vague in comparison.",
+    "gold_ids": [
+      "conv-26_session_8"
+    ]
+  },
+  {
+    "idx": 38,
+    "id": "conv-26_q37",
+    "category": "single-hop",
+    "query": "What did Melanie paint recently?",
+    "gold": "sunset",
+    "answer": "Recently, Melanie painted a plate featuring colorful floral patterns during a pottery class.",
+    "judge_reason": "The generated answer does not reference the topic provided in the gold answer, which is 'sunset.'",
+    "gold_ids": []
+  },
+  {
+    "idx": 41,
+    "id": "conv-26_q40",
+    "category": "single-hop",
+    "query": "How many times has Melanie gone to the beach in 2023?",
+    "gold": 2,
+    "answer": "Melanie went to the beach once in 2023.",
+    "judge_reason": "The generated answer states that Melanie went to the beach once in 2023, whereas the gold answer specifies two occurrences; this discrepancy makes the response incorrect.",
+    "gold_ids": [
+      "conv-26_session_10",
+      "conv-26_session_6"
+    ]
+  },
+  {
+    "idx": 42,
+    "id": "conv-26_q41",
+    "category": "temporal",
+    "query": "When did Caroline join a new activist group?",
+    "gold": "The Tuesday before 20 July 2023",
+    "answer": "Caroline joined a new activist group on March 25, 2026.",
+    "judge_reason": "The generated answer does not match the gold answer regarding the time period of Caroline joining the group.",
+    "gold_ids": [
+      "conv-26_session_10"
+    ]
+  },
+  {
+    "idx": 46,
+    "id": "conv-26_q45",
+    "category": "temporal",
+    "query": "When did Caroline attend a pride parade in August?",
+    "gold": "The Friday before 14 August 2023",
+    "answer": "Caroline attended a pride parade in August on the first Friday of the month.",
+    "judge_reason": "The generated answer specifies a date differing from the gold answer's time frame.",
+    "gold_ids": [
+      "conv-26_session_11"
+    ]
+  },
+  {
+    "idx": 49,
+    "id": "conv-26_q48",
+    "category": "single-hop",
+    "query": "What types of pottery have Melanie and her kids made?",
+    "gold": "bowls, cup",
+    "answer": "Melanie actively participates in pottery activities, showcasing her creativity, but there's no mention of her children engaging in pottery.",
+    "judge_reason": "The generated answer does not include the specific types of pottery mentioned in the gold answer.",
+    "gold_ids": [
+      "conv-26_session_12",
+      "conv-26_session_5",
+      "conv-26_session_8"
+    ]
+  },
+  {
+    "idx": 59,
+    "id": "conv-26_q58",
+    "category": "temporal",
+    "query": "When did Melanie make a plate in pottery class?",
+    "gold": "24 August 2023",
+    "answer": "Melanie made a plate in pottery class on 2023-07-16.",
+    "judge_reason": "The generated date '2023-07-16' does not match the gold date '24 August 2023', indicating the answer is incorrect.",
+    "gold_ids": [
+      "conv-26_session_14"
+    ]
+  },
+  {
+    "idx": 63,
+    "id": "conv-26_q62",
+    "category": "temporal",
+    "query": "When did Melanie go to the park?",
+    "gold": "27 August 2023",
+    "answer": "Melanie went to the park with her children on 2023-07-16.",
+    "judge_reason": "The generated answer references a different date than the gold answer, making it inconsistent.",
+    "gold_ids": [
+      "conv-26_session_15"
+    ]
+  },
+  {
+    "idx": 66,
+    "id": "conv-26_q65",
+    "category": "single-hop",
+    "query": "What are some changes Caroline has faced during her transition journey?",
+    "gold": "Changes to her body, losing unsupportive friends",
+    "answer": "Caroline has actively worked towards self-acceptance, joined support groups, participated in community events like pride parades and youth center volunteering, and expressed her identity through art, showcasing her personal growth.",
+    "judge_reason": "In the generated answer, the specified changes to her body and losing friends are not mentioned, which makes it incorrect based on the grading criteria.",
+    "gold_ids": [
+      "conv-26_session_11",
+      "conv-26_session_16"
+    ]
+  },
+  {
+    "idx": 67,
+    "id": "conv-26_q66",
+    "category": "single-hop",
+    "query": "What does Melanie do with her family on hikes?",
+    "gold": "Roast marshmallows, tell stories",
+    "answer": "Melanie and her family enjoy exploring nature together during hikes, connecting with the environment and each other.",
+    "judge_reason": "The generated answer does not reference the specific activities mentioned in the gold answer, thus it does not address the question adequately.",
+    "gold_ids": [
+      "conv-26_session_10",
+      "conv-26_session_16"
+    ]
+  },
+  {
+    "idx": 69,
+    "id": "conv-26_q68",
+    "category": "temporal",
+    "query": "How long has Melanie been practicing art?",
+    "gold": "Since 2016",
+    "answer": "Melanie began her artistic practices at least as early as the previous year, specifically painting a lake sunrise a year ago.",
+    "judge_reason": "The generated answer does not align with the gold answer in terms of timeframe provided.",
+    "gold_ids": [
+      "conv-26_session_16"
+    ]
+  },
+  {
+    "idx": 71,
+    "id": "conv-26_q70",
+    "category": "single-hop",
+    "query": "What transgender-specific events has Caroline attended?",
+    "gold": "Poetry reading, conference",
+    "answer": "Caroline mentioned attending a LGBTQ support group and participating in a pride parade.",
+    "judge_reason": "The generated answer does not align with the topics mentioned in the gold answer—poetry reading and conference.",
+    "gold_ids": [
+      "conv-26_session_15",
+      "conv-26_session_17"
+    ]
+  },
+  {
+    "idx": 76,
+    "id": "conv-26_q75",
+    "category": "single-hop",
+    "query": "How many children does Melanie have?",
+    "gold": 3,
+    "answer": "Melanie has two younger children in her family.",
+    "judge_reason": "The generated answer states 'two' which is not consistent with the gold answer '3'.",
+    "gold_ids": [
+      "conv-26_session_18"
+    ]
+  },
+  {
+    "idx": 78,
+    "id": "conv-26_q77",
+    "category": "multi-hop",
+    "query": "Would Melanie go on another roadtrip soon?",
+    "gold": "Likely no; since this one went badly",
+    "answer": "Based on the provided context, it's probable that Melanie might consider another roadtrip soon.",
+    "judge_reason": "The generated answer contradicts the reasoning provided in the gold answer despite being on the same topic.",
+    "gold_ids": [
+      "conv-26_session_18"
+    ]
+  },
+  {
+    "idx": 79,
+    "id": "conv-26_q78",
+    "category": "single-hop",
+    "query": "What items has Melanie bought?",
+    "gold": "Figurines, shoes",
+    "answer": "Melanie has enrolled in a pottery class.",
+    "judge_reason": "The generated answer discusses an activity Melanie enrolled in, which does not align with the items she previously purchased mentioned in the gold answer.",
+    "gold_ids": [
+      "conv-26_session_19",
+      "conv-26_session_7"
+    ]
+  },
+  {
+    "idx": 85,
+    "id": "conv-26_q84",
+    "category": "open-domain",
+    "query": "How does Melanie prioritize self-care?",
+    "gold": "by carving out some me-time each day for activities like running, reading, or playing the violin",
+    "answer": "Melanie incorporates activities like pottery and painting into her routine for relaxation and emotional expression.",
+    "judge_reason": "The generated answer mentions activities (pottery and painting) not aligned with those provided in the gold answer.",
+    "gold_ids": [
+      "conv-26_session_2"
+    ]
+  },
+  {
+    "idx": 86,
+    "id": "conv-26_q85",
+    "category": "open-domain",
+    "query": "What are Caroline's plans for the summer?",
+    "gold": "researching adoption agencies",
+    "answer": "Caroline has discussed her desire to focus on volunteering at an LGBTQ+ youth center, supporting and guiding young individuals. She finds it fulfilling to create community and make meaningful connections.",
+    "judge_reason": "The generated answer does not touch on the topic referenced in the gold answer, which is researching adoption agencies, focusing instead on unrelated activities.",
+    "gold_ids": [
+      "conv-26_session_2"
+    ]
+  },
+  {
+    "idx": 88,
+    "id": "conv-26_q87",
+    "category": "open-domain",
+    "query": "Why did Caroline choose the adoption agency?",
+    "gold": "because of their inclusivity and support for LGBTQ+ individuals",
+    "answer": "Caroline chose the adoption agency because she intended to create a safe, loving environment for a child in need.",
+    "judge_reason": "The generated answer mentions intentions for providing a safe environment, but does not align with the inclusivity and support for LGBTQ+ individuals reason stated in the gold answer.",
+    "gold_ids": [
+      "conv-26_session_2"
+    ]
+  },
+  {
+    "idx": 98,
+    "id": "conv-26_q97",
+    "category": "open-domain",
+    "query": "What workshop did Caroline attend recently?",
+    "gold": "LGBTQ+ counseling workshop",
+    "answer": "Caroline did not attend a specific workshop recently, but she participated in some volunteer activities at an LGBTQ+ youth center.",
+    "judge_reason": "The generated answer does not mention the same specific activity (workshop) stated in the gold answer.",
+    "gold_ids": [
+      "conv-26_session_4"
+    ]
+  }
+]

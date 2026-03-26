@@ -11,7 +11,10 @@ _RETRY_BASE_DELAY = 5
 class OpenAILLM(LLM):
     def __init__(self, model: str = "gpt-4o"):
         from openai import OpenAI
-        self._client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
+        self._client = OpenAI(
+            api_key=os.environ.get("OPENAI_API_KEY"),
+            base_url=os.environ.get("OPENAI_BASE_URL") or os.environ.get("AI_BASE_URL")
+        )
         self._model = model
 
     @property

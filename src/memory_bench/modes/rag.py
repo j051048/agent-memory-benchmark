@@ -64,9 +64,20 @@ class RAGMode(ResponseMode):
             return self._answer_mcq(query, context, retrieve_ms=0.0, raw_response=None, prompt_fn=prompt_fn, meta=meta)
         return self._answer_open(query, context, retrieve_ms=0.0, raw_response=None, prompt_fn=prompt_fn, meta=meta)
 
-    def _answer_open(self, query: str, context: str, retrieve_ms: float, raw_response: dict | None, prompt_fn=None, meta: dict | None = None) -> AnswerResult:
+    def _answer_open(self, query: str, context: str, retrieve_ms: float, raw_response: list | None, prompt_fn=None, meta: dict | None = None) -> AnswerResult:
         if prompt_fn:
-            effective_meta = {**(meta or {}), "_raw_response": raw_response}
+            # P0 Fix: Aggressively strip nested metadata to prevent 137k Token leakage
+            safe_raw = []
+            if isinstance(raw_response, list):
+                for r in raw_response:
+                    if isinstance(r, dict):
+                        safe_raw.append({k: v for k, v in r.items() if k != 'metadata'})
+                    else:
+                        safe_raw.append(r)
+            else:
+                safe_raw = raw_response
+                
+            effective_meta = {**(meta or {}), "_raw_response": safe_raw}
             prompt = prompt_fn(query, context, meta=effective_meta)
         else:
             prompt = _DEFAULT_OPEN_PROMPT.format(context=context, query=query)
@@ -79,9 +90,20 @@ class RAGMode(ResponseMode):
             raw_response=raw_response,
         )
 
-    def _answer_mcq(self, query: str, context: str, retrieve_ms: float, raw_response: dict | None, prompt_fn=None, meta: dict | None = None) -> AnswerResult:
+    def _answer_mcq(self, query: str, context: str, retrieve_ms: float, raw_response: list | None, prompt_fn=None, meta: dict | None = None) -> AnswerResult:
         if prompt_fn:
-            effective_meta = {**(meta or {}), "_raw_response": raw_response}
+            # P0 Fix: Aggressively strip nested metadata to prevent 137k Token leakage
+            safe_raw = []
+            if isinstance(raw_response, list):
+                for r in raw_response:
+                    if isinstance(r, dict):
+                        safe_raw.append({k: v for k, v in r.items() if k != 'metadata'})
+                    else:
+                        safe_raw.append(r)
+            else:
+                safe_raw = raw_response
+                
+            effective_meta = {**(meta or {}), "_raw_response": safe_raw}
             prompt = prompt_fn(query, context, meta=effective_meta)
         else:
             prompt = _DEFAULT_MCQ_PROMPT.format(context=context, query=query)
