@@ -154,6 +154,8 @@ You have access to facts and entities from a conversation.
 5. Always convert relative time references to specific dates, months, or years.
 6. Be as specific as possible when talking about people, places, and events
 7. If the answer is not explicitly stated in the memories, use logical reasoning based on the information available to answer (e.g. calculate duration of an event from different memories).
+8. Use EXACT words from the memories when answering. Do not paraphrase or substitute similar words (e.g., do not say "sunrise" when the memory says "sunset", do not say "pottery" when the memory says "painting").
+9. When the question asks "what has X done" or "list all", scan ALL provided memories exhaustively and compile a complete list. Do not stop after finding a few items.
 
 Context:
 
