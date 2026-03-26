@@ -1,12 +1,26 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useHead } from '@unhead/vue'
 import { fetchManifest, fetchExternalResults } from '../api.js'
 import { accuracyColor } from '../utils.js'
 import Card from '@/components/ui/card.vue'
 import Badge from '@/components/ui/badge.vue'
 import BarChart from '@/components/ui/bar-chart.vue'
 import TopNav from '@/components/ui/top-nav.vue'
+
+useHead({
+  title: 'Agent Memory Benchmark — AMB',
+  meta: [
+    { name: 'description', content: 'An open, reproducible leaderboard for evaluating AI agent memory and retrieval systems on real-world long-context tasks.' },
+    { property: 'og:title', content: 'Agent Memory Benchmark — AMB' },
+    { property: 'og:description', content: 'An open, reproducible leaderboard for evaluating AI agent memory and retrieval systems on real-world long-context tasks.' },
+    { property: 'og:url', content: 'https://agentmemorybenchmark.ai/' },
+    { name: 'twitter:title', content: 'Agent Memory Benchmark — AMB' },
+    { name: 'twitter:description', content: 'An open, reproducible leaderboard for evaluating AI agent memory and retrieval systems on real-world long-context tasks.' },
+  ],
+  link: [{ rel: 'canonical', href: 'https://agentmemorybenchmark.ai/' }],
+})
 
 const ABOUT_OPEN_KEY = 'omb_about_open'
 

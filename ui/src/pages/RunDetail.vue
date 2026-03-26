@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useHead } from '@unhead/vue'
 import { fetchRunData } from '../api.js'
 import { avg, pct50 } from '../utils.js'
 import Badge from '@/components/ui/badge.vue'
@@ -82,6 +83,20 @@ const filtered = computed(() =>
 )
 
 const active = computed(() => activeIndex.value != null ? results.value[activeIndex.value] : null)
+
+useHead(computed(() => {
+  if (!data.value) return { title: 'Run — Agent Memory Benchmark' }
+  const d = data.value
+  const mem = d.run_name && d.run_name !== d.memory_provider ? `${d.memory_provider} (${d.run_name})` : d.memory_provider
+  const title = `${d.dataset ? d.dataset + ' · ' : ''}${d.split || d.domain || ''} · ${mem} — AMB`
+  return {
+    title,
+    meta: [
+      { property: 'og:title', content: title },
+      { name: 'robots', content: 'noindex' },
+    ],
+  }
+}))
 
 const headerTitle = computed(() => {
   if (!data.value) return '—'
