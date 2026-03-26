@@ -240,12 +240,14 @@ class NexusMemoryProvider(MemoryProvider):
 
     async def async_ingest(self, documents: list[Document]) -> None:
         """Ingest documents with temporal resolution and turn-level chunking."""
-        sem = asyncio.Semaphore(10)
+        # Global semaphore across all docs to prevent API flooding
+        sem = asyncio.Semaphore(5)
         processed_keys: set[str] = set()
         total_chunks = 0
 
         async def bounded_save(doc: Document):
             nonlocal total_chunks
+            print(f"  [Ingest] Processing document: {doc.id} ({doc.user_id})")
             async with sem:
                 uid = self._to_uuid(doc.user_id)
                 content = doc.content
@@ -255,7 +257,8 @@ class NexusMemoryProvider(MemoryProvider):
                     content = self._resolve_relative_dates(content, doc.timestamp)
 
                 # Phase 2: Split session into turn-level chunks
-                chunks = self._split_into_chunks(content, doc.id, doc.timestamp, chunk_size=3)
+                # LoCoMo Optimization: 15 turns per chunk significantly reduces API load for large tests
+                chunks = self._split_into_chunks(content, doc.id, doc.timestamp, chunk_size=15)
 
                 for i, chunk_content in enumerate(chunks):
                     key = f"doc_{doc.id}_chunk_{i}"

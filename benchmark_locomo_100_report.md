@@ -4,44 +4,44 @@
 
 - **测试数据集**: LoCoMo (locomo10)
 - **总测试题数**: 100
-- **正确数量**: 75
-- **准确率**: 75.00%
-- **测试耗时**: 16.3 min
+- **正确数量**: 79
+- **准确率**: 79.00%
+- **测试耗时**: 14.6 min
 
 ## 详细结果 (前 30 条展示)
 
 | ID | 用户 | 结果 | 预期答案 | 代理答案 | 耗时 |
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| conv-26_q0 | conv-26 | ❌ | 7 May 2023 | Caroline attended the LGBTQ support group on July ... | 10.4s |
-| conv-26_q1 | conv-26 | ✅ | 2022 | Melanie painted a sunrise last year. | 8.3s |
-| conv-26_q2 | conv-26 | ✅ | Psychology, counseling certification | Caroline seems likely to pursue education in couns... | 10.2s |
-| conv-26_q3 | conv-26 | ❌ | Adoption agencies | Caroline researched counseling as a potential path... | 11.4s |
-| conv-26_q4 | conv-26 | ✅ | Transgender woman | Caroline identifies as part of the LGBTQ+ communit... | 10.0s |
-| conv-26_q5 | conv-26 | ✅ | The sunday before 25 May 2023 | The provided context does not indicate that Melani... | 8.4s |
-| conv-26_q6 | conv-26 | ✅ | June 2023 | The context lacks specific information regarding M... | 6.8s |
-| conv-26_q7 | conv-26 | ✅ | Single | The context does not specify Caroline's relationsh... | 17.9s |
-| conv-26_q8 | conv-26 | ✅ | The week before 9 June 2023 | The context does not provide information about Car... | 9.1s |
-| conv-26_q9 | conv-26 | ❌ | The week before 9 June 2023 | Caroline mentioned meeting up with her friends, fa... | 11.0s |
-| conv-26_q10 | conv-26 | ✅ | 4 years | Caroline has had her current group of friends for ... | 7.5s |
-| conv-26_q11 | conv-26 | ✅ | Sweden | Caroline moved to her current location from Sweden... | 16.1s |
-| conv-26_q12 | conv-26 | ✅ | 10 years ago | Caroline's 18th birthday was approximately 10 year... | 14.9s |
-| conv-26_q13 | conv-26 | ✅ | counseling or mental health for Transgender people | Caroline has expressed her interest in pursuing a ... | 8.7s |
-| conv-26_q14 | conv-26 | ✅ | Likely no | Caroline might have a different approach or focus ... | 10.0s |
-| conv-26_q15 | conv-26 | ✅ | pottery, camping, painting, swimming | Melanie engages in activities such as pottery, pai... | 8.7s |
-| conv-26_q16 | conv-26 | ❌ | 2 July 2023 | Melanie signed up for a pottery class on a Tuesday... | 7.8s |
-| conv-26_q17 | conv-26 | ✅ | July 2023 | The provided context does not detail when Caroline... | 8.0s |
-| conv-26_q18 | conv-26 | ✅ | beach, mountains, forest | Melanie camped in the mountains with her family. | 7.9s |
-| conv-26_q19 | conv-26 | ✅ | dinosaurs, nature | Melanie's kids enjoy outdoor activities, such as p... | 7.5s |
-| conv-26_q20 | conv-26 | ✅ | 5 July 2023 | The memories do not provide information on Melanie... | 9.0s |
-| conv-26_q21 | conv-26 | ✅ | The week before 6 July 2023 | There is no mention of Caroline having a picnic in... | 9.4s |
-| conv-26_q22 | conv-26 | ✅ | Yes, since she collects classic children's books | Yes, based on the context, it seems possible. | 13.7s |
-| conv-26_q23 | conv-26 | ❌ | "Nothing is Impossible", "Charlotte's Web" | Melanie has read a book recommended by Caroline. | 8.1s |
-| conv-26_q24 | conv-26 | ✅ | Running, pottery | Melanie participates in pottery to alleviate stres... | 7.2s |
-| conv-26_q25 | conv-26 | ❌ | 10 July 2023 | Caroline attended the LGBTQ support group on July ... | 10.2s |
-| conv-26_q26 | conv-26 | ✅ | 2022 | Melanie read the book "Nothing is Impossible" last... | 10.9s |
-| conv-26_q27 | conv-26 | ✅ | LIkely no; though she likes reading, she wants to ... | Caroline has not indicated any intent to pursue wr... | 9.8s |
-| conv-26_q28 | conv-26 | ❌ | The friday before 15 July 2023 | Caroline attended the adoption assistance group du... | 8.9s |
-| conv-26_q29 | conv-26 | ✅ | The Friday before 15 July 2023 | Melanie attended the pottery workshop on the date ... | 9.2s |
+| conv-26_q0 | conv-26 | ✅ | 7 May 2023 | Caroline attended the LGBTQ support group on 7 May... | 8.3s |
+| conv-26_q1 | conv-26 | ✅ | 2022 | Melanie painted a lake sunrise in the year 2022. | 9.2s |
+| conv-26_q2 | conv-26 | ✅ | Psychology, counseling certification | Caroline has expressed interest in counseling and ... | 7.7s |
+| conv-26_q3 | conv-26 | ❌ | Adoption agencies | Caroline researched possibilities in the field of ... | 8.1s |
+| conv-26_q4 | conv-26 | ✅ | Transgender woman | Caroline identifies as transgender. | 8.1s |
+| conv-26_q5 | conv-26 | ✅ | The sunday before 25 May 2023 | This information is not mentioned in the provided ... | 9.2s |
+| conv-26_q6 | conv-26 | ✅ | June 2023 | No specific date for Melanie's camping trip is men... | 8.1s |
+| conv-26_q7 | conv-26 | ✅ | Single | The provided context does not explicitly state Car... | 8.4s |
+| conv-26_q8 | conv-26 | ✅ | The week before 9 June 2023 | The context does not mention any instance of Carol... | 7.3s |
+| conv-26_q9 | conv-26 | ❌ | The week before 9 June 2023 | Caroline met individuals, including her supportive... | 10.3s |
+| conv-26_q10 | conv-26 | ✅ | 4 years | Based on the context, it's clear that Caroline has... | 7.9s |
+| conv-26_q11 | conv-26 | ✅ | Sweden | The context does not explicitly mention Caroline's... | 8.9s |
+| conv-26_q12 | conv-26 | ✅ | 10 years ago | Based on the information provided, Caroline's birt... | 7.1s |
+| conv-26_q13 | conv-26 | ✅ | counseling or mental health for Transgender people | Caroline has decided to pursue a career in counsel... | 7.6s |
+| conv-26_q14 | conv-26 | ✅ | Likely no | It's likely that Caroline's interest in counseling... | 10.3s |
+| conv-26_q15 | conv-26 | ✅ | pottery, camping, painting, swimming | Melanie engages in painting, swimming, pottery, fa... | 8.0s |
+| conv-26_q16 | conv-26 | ✅ | 2 July 2023 | 2 July 2023. | 8.0s |
+| conv-26_q17 | conv-26 | ✅ | July 2023 | Caroline attended the LGBTQ conference on July 10,... | 8.0s |
+| conv-26_q18 | conv-26 | ❌ | beach, mountains, forest | Melanie has camped with her family and enjoyed mem... | 8.1s |
+| conv-26_q19 | conv-26 | ❌ | dinosaurs, nature | Melanie's kids enjoy activities like beach outings... | 6.4s |
+| conv-26_q20 | conv-26 | ✅ | 5 July 2023 | Based on the provided context, the museum visit by... | 7.0s |
+| conv-26_q21 | conv-26 | ✅ | The week before 6 July 2023 | There is no record of Caroline having a picnic. | 8.0s |
+| conv-26_q22 | conv-26 | ✅ | Yes, since she collects classic children's books | Yes, it is plausible that Caroline might have Dr. ... | 9.5s |
+| conv-26_q23 | conv-26 | ✅ | "Nothing is Impossible", "Charlotte's Web" | The context does not specify any books Melanie has... | 9.3s |
+| conv-26_q24 | conv-26 | ❌ | Running, pottery | Melanie uses painting to destress and express her ... | 8.9s |
+| conv-26_q25 | conv-26 | ✅ | 10 July 2023 | Caroline attended the LGBTQ conference on 10 July ... | 6.5s |
+| conv-26_q26 | conv-26 | ✅ | 2022 | Melanie did not mention reading a book titled 'Not... | 7.9s |
+| conv-26_q27 | conv-26 | ✅ | LIkely no; though she likes reading, she wants to ... | No indication suggests that Caroline would pursue ... | 8.4s |
+| conv-26_q28 | conv-26 | ✅ | The friday before 15 July 2023 | The context does not provide any information about... | 10.0s |
+| conv-26_q29 | conv-26 | ❌ | The Friday before 15 July 2023 | Melanie attended the pottery workshop on July 2, 2... | 7.7s |
 
 
 ---
