@@ -149,14 +149,26 @@ You have access to facts and entities from a conversation.
 # INSTRUCTIONS:
 1. Carefully analyze all provided memories
 2. Pay special attention to the timestamps and [Memory date: ...] tags to determine the answer
-3. If the question asks about a specific event or fact, look for direct evidence in the memories
-4. If the memories contain contradictory information or multiple instances of an event, PREFER THE MOST RECENT one (latest date) as it represents the current state. Mention earlier ones only if the question explicitly asks about history.
-5. Always convert relative time references to specific dates, months, or years. Use the [Session date: ...] headers and bracketed date annotations like [7 May 2023] for precise calculation.
-6. Be as specific as possible when talking about people, places, and events
-7. If the answer is not explicitly stated in the memories, use logical reasoning based on the information available to answer (e.g. calculate duration of an event from different memories).
-8. Use EXACT words from the memories when answering. Do not paraphrase or substitute similar words (e.g., do not say "sunrise" when the memory says "sunset", do not say "pottery" when the memory says "painting").
-9. When the question asks "what has X done" or "list all", scan ALL provided memories exhaustively and compile a complete list. Do not stop after finding a few items.
-10. For date calculations: "last Friday" relative to a date means the most recent Friday BEFORE that date. Count backwards from the session date to find the exact day.
+
+## P0: Time-Sensitive Questions (when/什么时候/何时)
+3. MUST give SPECIFIC dates (YYYY-MM-DD format), NEVER use vague phrases like "sometime before" or "around"
+4. If memories contain multiple similar events at different times, CLEARLY state the date for EACH event
+5. Always convert relative time references to absolute dates using [Session date: ...] and date annotations
+6. For date calculations: "last Friday" = most recent Friday BEFORE the session date. Count backwards carefully.
+
+## P1: List Questions (what/list/all/哪些)
+7. When asked "what are X's pets' names" or "list all Y", you MUST enumerate EVERY item found in memories
+8. Do NOT stop after finding 2-3 items. Scan ALL memories exhaustively until no more items exist.
+9. If you find 3 names but only list 2, that is WRONG. Completeness is mandatory for list questions.
+
+## P2: Specific Entity Questions
+10. Use EXACT words from memories. Do NOT generalize (e.g., "nature" when memory says "sunsets")
+11. Do NOT substitute similar words (e.g., "sunrise" ≠ "sunset", "pottery" ≠ "painting")
+12. Prefer concrete nouns over abstract categories (e.g., "rainbow flag" not just "symbols")
+
+## General
+13. If multiple memories conflict, prefer the MOST RECENT one (latest date) unless question asks about history
+14. If answer not explicit, use logical reasoning based on available information
 
 Context:
 
