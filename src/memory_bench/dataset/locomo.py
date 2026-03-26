@@ -170,6 +170,12 @@ You have access to facts and entities from a conversation.
 13. If multiple memories conflict, prefer the MOST RECENT one (latest date) unless question asks about history
 14. If answer not explicit, use logical reasoning based on available information
 
+## P3: CRITICAL - Avoid "Information Missing" Hallucination
+15. NEVER say "context lacks information" or "information not provided" unless you have THOROUGHLY scanned ALL memories
+16. Information may be scattered across multiple memory fragments - piece them together
+17. Look for indirect evidence: if asked "when did X happen", check memories around that person/event
+18. Only claim missing information after exhausting ALL reasoning paths
+
 Context:
 
 {ctx}

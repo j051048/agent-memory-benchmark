@@ -38,10 +38,10 @@ class GeminiJudge:
         from .llm import get_judge_llm
         self._llm = llm or get_judge_llm()
 
-    def score(self, query: str, answer: str, gold_answers: list[str], prompt_fn=None) -> JudgeResult:
+    async def score(self, query: str, answer: str, gold_answers: list[str], prompt_fn=None) -> JudgeResult:
         prompt = prompt_fn(query, gold_answers, answer) if prompt_fn else None
         if not prompt:
             gold_str = "\n".join(f"- {a}" for a in gold_answers)
             prompt = _PROMPT.format(query=query, gold_answers=gold_str, answer=answer)
-        data = self._llm.generate(prompt, _SCHEMA)
+        data = await self._llm.async_generate(prompt, _SCHEMA)
         return JudgeResult(correct=bool(data["correct"]), reason=data["reason"])

@@ -36,6 +36,11 @@ class LLM(ABC):
         """
         ...
 
+    async def async_generate(self, prompt: str, schema: Schema) -> dict:
+        """Async version of generate."""
+        import asyncio
+        return await asyncio.to_thread(self.generate, prompt, schema)
+
     def tool_loop(self, prompt: str, tools: list[ToolDef], max_tool_calls: int = 10) -> str:
         """
         Run an agentic tool-calling loop. The model may call tools zero or more times

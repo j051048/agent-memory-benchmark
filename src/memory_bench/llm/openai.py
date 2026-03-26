@@ -1,6 +1,7 @@
 import json
 import os
 import time
+import asyncio
 
 from .base import LLM, Schema
 
@@ -10,10 +11,17 @@ _RETRY_BASE_DELAY = 5
 
 class OpenAILLM(LLM):
     def __init__(self, model: str = "gpt-4o"):
-        from openai import OpenAI
+        from openai import OpenAI, AsyncOpenAI
+        import httpx
         self._client = OpenAI(
             api_key=os.environ.get("OPENAI_API_KEY"),
-            base_url=os.environ.get("OPENAI_BASE_URL") or os.environ.get("AI_BASE_URL")
+            base_url=os.environ.get("OPENAI_BASE_URL") or os.environ.get("AI_BASE_URL"),
+            http_client=httpx.Client(http2=False)
+        )
+        self._async_client = AsyncOpenAI(
+            api_key=os.environ.get("OPENAI_API_KEY"),
+            base_url=os.environ.get("OPENAI_BASE_URL") or os.environ.get("AI_BASE_URL"),
+            http_client=httpx.AsyncClient(http2=False)
         )
         self._model = model
 
@@ -52,3 +60,35 @@ class OpenAILLM(LLM):
                         continue
                 raise
         raise RuntimeError(f"OpenAI request failed after {_MAX_RETRIES} retries: {last_exc}")
+
+    async def async_generate(self, prompt: str, schema: Schema) -> dict:
+        schema_json = {
+            "type": "object",
+            "properties": schema.properties,
+            "required": schema.required,
+            "additionalProperties": False,
+        }
+        delay = _RETRY_BASE_DELAY
+        last_exc = None
+        for attempt in range(_MAX_RETRIES):
+            try:
+                response = await self._async_client.chat.completions.create(
+                    model=self._model,
+                    messages=[{"role": "user", "content": prompt}],
+                    response_format={
+                        "type": "json_schema",
+                        "json_schema": {"name": "response", "schema": schema_json, "strict": True},
+                    },
+                )
+                text = response.choices[0].message.content
+                return json.loads(text)
+            except Exception as e:
+                last_exc = e
+                msg = str(e)
+                if "429" in msg or "rate" in msg.lower():
+                    if attempt < _MAX_RETRIES - 1:
+                        await asyncio.sleep(delay)
+                        delay *= 2
+                        continue
+                raise
+        raise RuntimeError(f"OpenAI async request failed after {_MAX_RETRIES} retries: {last_exc}")

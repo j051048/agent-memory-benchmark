@@ -241,7 +241,7 @@ class NexusMemoryProvider(MemoryProvider):
     async def async_ingest(self, documents: list[Document]) -> None:
         """Ingest documents with temporal resolution and turn-level chunking."""
         # Global semaphore across all docs to prevent API flooding
-        sem = asyncio.Semaphore(5)
+        sem = asyncio.Semaphore(4)  # Boosted to 4 now that VectorService reuses TLS sessions
         processed_keys: set[str] = set()
         total_chunks = 0
 
@@ -266,12 +266,21 @@ class NexusMemoryProvider(MemoryProvider):
                         continue
                     processed_keys.add(key)
                     total_chunks += 1
-                    await self.service.save_memory(
-                        user_id=uid, key=key, value=chunk_content,
-                        category="document",
-                        metadata={"doc_id": doc.id, "chunk_index": i, "source": "locomo"},
-                        db=supabase, valid_from=doc.timestamp,
-                    )
+                    try:
+                        # G5 Fix: Wrap database save in wait_for to prevent infinite hanging on TLS issues
+                        await asyncio.wait_for(
+                            self.service.save_memory(
+                                user_id=uid, key=key, value=chunk_content,
+                                category="document",
+                                metadata={"doc_id": doc.id, "chunk_index": i, "source": "locomo"},
+                                db=supabase, valid_from=doc.timestamp,
+                            ),
+                            timeout=45.0
+                        )
+                    except asyncio.TimeoutError:
+                        print(f"      [Ingest] WARNING: Save memory TIMEOUT (45s) for {key} - skipping.")
+                    except Exception as e:
+                        print(f"      [Ingest] WARNING: Save memory ERROR {e} for {key} - skipping.")
 
         tasks = [bounded_save(doc) for doc in documents]
         if tasks:
